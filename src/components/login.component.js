@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+const crypto = require('crypto');
+
+
 
 
 export default class LogIn extends Component {
@@ -18,6 +21,8 @@ export default class LogIn extends Component {
         }
 
     }
+
+
 
     componentDidMount(){
         axios.get('http://localhost:5000/users/')
@@ -48,26 +53,20 @@ export default class LogIn extends Component {
             username: this.state.username,
             password: this.state.password
         }
-        this.useriList()
 
-        for (var i = 0; i < this.userList.length; i++ ) {
-            if (this.userList[i] === 'true') {
-
-                }
-        }
-
-        if (this.state.ans === 1) {
-            console.log('True')
-        } else if (this.state.ans === 0) {
-            console.log('false')
-        } else {
-            console.log('jotain muuta')
-        }
-
-        console.log(this.state.ans, user);
+        this.state.userList.forEach(element => {
+            if (element.password === getHashedPassword(this.state.password) && element.username === this.state.username) {
+                console.log('Onnistuuu')
+                window.location = '/home';
+            } else {
+                console.log('ei onnaa')
+            }
+        });
+        console.log( user);
     }
+    
 
-    useriList() {
+    /* useriList() {
         return this.state.userList.map(currentUser => {
             if (
                 currentUser.username === this.state.username &&
@@ -81,7 +80,7 @@ export default class LogIn extends Component {
 
             
         })
-    }
+    } */
 
 
     render() {
@@ -119,3 +118,10 @@ export default class LogIn extends Component {
         )
     }
 }
+
+// For unHashing
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+  }

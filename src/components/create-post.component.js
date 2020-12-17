@@ -62,13 +62,15 @@ export default class CreatePost extends Component {
 
         axios.post('http://localhost:5000/posts/add', post)
             .then(res => console.log(res.data));
+        this.componentDidMount();
 
         this.setState({
             content: ''
         })
+
+        
         // Tänne voisi laittaa koodin joka tyhjentää tekstilaatikon submitattaessa
 
-        // window.location = '/';
     }
 
     postiList() {
@@ -81,8 +83,13 @@ export default class CreatePost extends Component {
     render() {
         return (
             <div>
-                <h3>Create New Post</h3>
+                <h3>Post Forum</h3>
                 <form onSubmit={this.onSubmit}>
+
+                    <div className="form-group"> 
+                        <p> {this.postiList()}</p>
+                    </div>
+
                     <div className="form-group"> 
                         <label>Post something: </label>
                         <input  type="text"
@@ -97,10 +104,7 @@ export default class CreatePost extends Component {
                     <input type="submit" value="Make a post" className="btn btn-primary" />
                     </div>
 
-                    <div className="form-group"> 
-                        <label>All posts are shown here: </label>
-                        <p> {this.postiList()}</p>
-                    </div>
+                    
 
 
                 </form>
