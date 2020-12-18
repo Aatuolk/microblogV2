@@ -6,6 +6,7 @@ import Navbar from './components/navbar.component';
 import PostForum from './components/post-forum.component';
 import CreatePost from './components/create-post.component';
 import CreateUser from './components/create-user.component';
+import PostPage from './components/post-page.component';
 
 
 
@@ -17,7 +18,8 @@ function App() {
       <br/>
       <Route path="/" exact component={PostForum} />
       <Route path="/users" component={CreateUser} />
-      <Route path="/create" component={CreatePost} /> 
+      <Route path="/create" component={CreatePost} />
+      <Route path="/posts" component={PostPage} /> 
       </div>
     </Router>
   );

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 const crypto = require('crypto');
 
-
+// cretaedAt voisi laittaa kuntoon
 const Posti = props => (
     <div>
         <strong>{props.post.username} says:</strong>
-        <p>{props.post.content}   ({props.post.createdAt})</p>
+        <p>{props.post.content}   ({props.post.createdAt})</p>   
     </div>
 )
 
@@ -99,7 +99,7 @@ export default class CreatePost extends Component {
             }
         }); 
 
-
+        this.postiList()
         this.setState({
             content: ''
         })

@@ -33,4 +33,17 @@ router.route('/:id').delete((req, res) => {
       .catch(err => res.status(400).json('Error: ' + err));
 }); 
 
+router.route("/find").post((req, res) => {
+  Post.find({ user: req.body.username }, (err, doc) => {
+      if (err) throw err;
+      if (!doc) res.json("No posts found from that user !");
+      if (doc) {
+          res.json("doc.user");
+      }
+
+
+  
+  });
+});
+
   module.exports = router;
