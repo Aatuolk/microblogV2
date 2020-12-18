@@ -18,7 +18,7 @@ function App() {
       <br/>
       <Route path="/" exact component={FrontPage} />
       <Route path="/login" component={LogIn} />
-      <Route path="/signin" component={CreateUser} />
+      <Route path="/users" component={CreateUser} />
       <Route path="/home" component={PostForum} />
       <Route path="/create" component={CreatePost} /> 
       </div>

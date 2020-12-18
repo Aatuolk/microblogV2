@@ -4,7 +4,6 @@ const crypto = require('crypto');
 
 
 
-
 export default class LogIn extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +15,7 @@ export default class LogIn extends Component {
         this.state = {
             username: '',
             password: '',
-            ans: 0,
+            // ans: 0,
             userList: []
         }
 
@@ -55,13 +54,15 @@ export default class LogIn extends Component {
         }
 
         this.state.userList.forEach(element => {
-            if (element.password === getHashedPassword(this.state.password) && element.username === this.state.username) {
+            if (element.password === HashPassword(this.state.password) && element.username === this.state.username) {
                 console.log('Onnistuuu')
                 window.location = '/home';
             } else {
                 console.log('ei onnaa')
             }
-        });
+        }); 
+
+
         console.log( user);
     }
     
@@ -120,7 +121,7 @@ export default class LogIn extends Component {
 }
 
 // For unHashing
-const getHashedPassword = (password) => {
+const HashPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
     return hash;

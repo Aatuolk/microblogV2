@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+const crypto = require('crypto');
+
 
 const Posti = props => (
     <div>
@@ -16,13 +18,17 @@ export default class CreatePost extends Component {
         super(props);
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
         this.onChangeContent = this.onChangeContent.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             username: '',
+            password: '',
             content: '',
-            postList: []
+            postList: [],
+            userList: [],
+            usernames: []
         }
 
     }
@@ -36,11 +42,31 @@ export default class CreatePost extends Component {
             .catch((error) => {
                 console.log(error);
             })
+
+        axios.get('http://localhost:5000/users/')
+            .then(response => {
+                this.setState({ 
+                    userList: response.data,
+                    usernames: response.data.map(user => user.username)
+                    // username: response.data [0].username 
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+            
     }
 
     onChangeUsername(e) {
         this.setState({
             username: e.target.value
+        });
+    }
+
+    onChangePassword(e) {
+        this.setState({
+            password: e.target.value
         });
     }
 
@@ -50,6 +76,7 @@ export default class CreatePost extends Component {
         });
     }
 
+
     onSubmit(e) {
         e.preventDefault();
 
@@ -58,18 +85,31 @@ export default class CreatePost extends Component {
             content: this.state.content
         }
 
+        this.state.userList.forEach(element => {
+            if (element.password === HashPassword(this.state.password) && element.username === this.state.username) {
+                console.log('Onnistuuu')
+
+                axios.post('http://localhost:5000/posts/add', post)
+                .then(res => console.log(res.data));
+                
+                this.componentDidMount();
+                
+                
+            } else {
+                console.log('ei onnaa')
+            }
+        }); 
+
+
         console.log(post);
 
-        axios.post('http://localhost:5000/posts/add', post)
-            .then(res => console.log(res.data));
-        this.componentDidMount();
+
 
         this.setState({
-            content: ''
+            content: '',
+            username: '',
+            password: ''
         })
-
-        
-        // Tänne voisi laittaa koodin joka tyhjentää tekstilaatikon submitattaessa
 
     }
 
@@ -82,33 +122,62 @@ export default class CreatePost extends Component {
 
     render() {
         return (
-            <div>
-                <h3>Post Forum</h3>
-                <form onSubmit={this.onSubmit}>
+                <div>
+                <h4>Here you can create posts by inserting your Username and Password and then you can submit a post</h4>
+                <div className="jumbotron">
+                    <form onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <p> {this.postiList()}</p>
+                        </div>
 
-                    <div className="form-group"> 
-                        <p> {this.postiList()}</p>
-                    </div>
 
-                    <div className="form-group"> 
-                        <label>Post something: </label>
-                        <input  type="text"
+                        <div className="form-group">
+                            <label>
+                                <strong>Username:</strong> 
+                            </label>
+                            <input type="text"
+                            required
+                            className="form-control"
+                            value={this.state.username}
+                            onChange={this.onChangeUsername}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>
+                                <strong>Password:</strong> 
+                            </label>
+                            <input type="text"
+                            required
+                            className="form-control"
+                            value={this.state.password}
+                            onChange={this.onChangePassword}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>
+                                <strong>Content:</strong> 
+                            </label>
+                            <textarea type="text"
+                            rows="3"
                             required
                             className="form-control"
                             value={this.state.content}
                             onChange={this.onChangeContent}
                             />
-                    </div>
-                    
-                    <div className="form-group">
-                    <input type="submit" value="Make a post" className="btn btn-primary" />
-                    </div>
-
-                    
-
-
-                </form>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Submit Post" className="btn btn-dark" />
+                        </div>
+                    </form>
+                </div>
             </div>
         )
     }
 }
+
+// For unHashing
+const HashPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+  }
