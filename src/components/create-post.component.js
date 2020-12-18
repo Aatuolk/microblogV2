@@ -5,8 +5,8 @@ const crypto = require('crypto');
 
 const Posti = props => (
     <div>
-        <h3>{props.post.username} says</h3>
-        <p>{props.post.content}</p>
+        <strong>{props.post.username} says:</strong>
+        <p>{props.post.content}   ({props.post.createdAt})</p>
     </div>
 )
 
@@ -87,28 +87,21 @@ export default class CreatePost extends Component {
 
         this.state.userList.forEach(element => {
             if (element.password === HashPassword(this.state.password) && element.username === this.state.username) {
-                console.log('Onnistuuu')
+
 
                 axios.post('http://localhost:5000/posts/add', post)
                 .then(res => console.log(res.data));
+
                 
                 this.componentDidMount();
                 
                 
-            } else {
-                console.log('ei onnaa')
             }
         }); 
 
 
-        console.log(post);
-
-
-
         this.setState({
-            content: '',
-            username: '',
-            password: ''
+            content: ''
         })
 
     }
@@ -159,6 +152,7 @@ export default class CreatePost extends Component {
                             </label>
                             <textarea type="text"
                             rows="3"
+                            maxLength='300'
                             required
                             className="form-control"
                             value={this.state.content}

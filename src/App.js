@@ -6,8 +6,7 @@ import Navbar from './components/navbar.component';
 import PostForum from './components/post-forum.component';
 import CreatePost from './components/create-post.component';
 import CreateUser from './components/create-user.component';
-import FrontPage from './components/front-page.component';
-import LogIn from './components/login.component';
+
 
 
 function App() {
@@ -16,10 +15,8 @@ function App() {
       <div className="container">
       <Navbar />
       <br/>
-      <Route path="/" exact component={FrontPage} />
-      <Route path="/login" component={LogIn} />
+      <Route path="/" exact component={PostForum} />
       <Route path="/users" component={CreateUser} />
-      <Route path="/home" component={PostForum} />
       <Route path="/create" component={CreatePost} /> 
       </div>
     </Router>
