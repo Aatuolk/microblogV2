@@ -53,12 +53,11 @@ export default class PostPage extends Component {
         e.preventDefault();
 
 
-        //input from user
+
         const user = {
             username: this.state.username
         }
 
-        //Get posts from defined username
         axios.post('http://localhost:5000/posts/find', user)
             .then(response => {
                 this.setState({ postList: response.data })
