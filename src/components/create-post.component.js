@@ -2,37 +2,47 @@ import React, { Component } from 'react';
 import axios from 'axios';
 const crypto = require('crypto');
 
-// cretaedAt voisi laittaa kuntoon
+// Options for date foramtting
+const DATE_OPTIONS = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' , hour: 'numeric', minute: 'numeric'};
+
+// Functional React component for single posts which appear to the post forum
 const Posti = props => (
     <div>
         <strong>{props.post.username} says:</strong>
-        <p>{props.post.content}   ({props.post.createdAt})</p>   
+        <p>{props.post.content}</p>
+        <p>({(new Date(props.post.createdAt)).toLocaleDateString(undefined, DATE_OPTIONS)})</p>   
     </div>
 )
 
 
 
-
+// React class component
 export default class CreatePost extends Component {
+    // Constructor for react component
     constructor(props) {
         super(props);
 
+        // Binding "this" for each method so "this" will refer to the class
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.onChangeContent = this.onChangeContent.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-
+        
+        //Initial state
         this.state = {
             username: '',
             password: '',
             content: '',
             postList: [],
-            userList: [],
-            usernames: []
+            userList: []
+            //usernames: []
         }
 
     }
 
+    // React lifecycle method which is called right before anything is displayed on the page
+    // Send http get request tot he backend and gets all posts from the database and puts them to the postList
+    // Send http get request tot he backend and gets all users from the database and puts them to the userList
     componentDidMount(){
         axios.get('http://localhost:5000/posts/')
             .then(response => {
@@ -47,7 +57,7 @@ export default class CreatePost extends Component {
             .then(response => {
                 this.setState({ 
                     userList: response.data,
-                    usernames: response.data.map(user => user.username)
+                    // usernames: response.data.map(user => user.username)
                     // username: response.data [0].username 
                 })
             })
@@ -58,35 +68,40 @@ export default class CreatePost extends Component {
             
     }
 
+    // Sets state when username is changed
     onChangeUsername(e) {
         this.setState({
             username: e.target.value
         });
     }
-
+    
+    // Sets state when password is changed
     onChangePassword(e) {
         this.setState({
             password: e.target.value
         });
     }
 
+    // Sets state when content is changed
     onChangeContent(e) {
         this.setState({
             content: e.target.value
         });
     }
 
-
+    // Handles the submit event (when submit button is clicked)
     onSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // prevents default html submit behaviour
 
+        // users input
         const post = {
             username: this.state.username,
             content: this.state.content
         }
 
+        // Sends http post request to the backend if username and password are correct
         this.state.userList.forEach(element => {
-            if (element.password === HashPassword(this.state.password) && element.username === this.state.username) {
+            if (element.password === getHashedPassword(this.state.password) && element.username === this.state.username) {
 
 
                 axios.post('http://localhost:5000/posts/add', post)
@@ -99,20 +114,23 @@ export default class CreatePost extends Component {
             }
         }); 
 
-        this.postiList()
+        // Maps the posts again when new post is submitted
+        this.postiList() 
+
+        // Content box is set to empty when post is submitted
         this.setState({
             content: ''
         })
 
     }
-
+    // Maps certain elements from the array
     postiList() {
         return this.state.postList.map(currentPost => {
             return <Posti post={currentPost} key={currentPost._id} />;
         })
     }
 
-
+    // What renders to the page is shown here
     render() {
         return (
                 <div>
@@ -170,7 +188,7 @@ export default class CreatePost extends Component {
 }
 
 // For unHashing
-const HashPassword = (password) => {
+const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
     return hash;

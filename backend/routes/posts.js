@@ -1,27 +1,37 @@
 const router = require('express').Router();
 let Post = require('../models/post.model');
 
+
+// Handles http get requests on the /posts/ path
+// return posts in json format from the DB
 router.route('/').get((req, res) => {
-    Post.find()
-      .then(posts => res.json(posts))
-      .catch(err => res.status(400).json('Error: ' + err));
+  Post.find()
+    .then(posts => res.json(posts))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+// Handles http post requests on the /posts/add path
+// adds new posts to the database
 router.route('/add').post((req, res) => {
-    const username = req.body.username;
-    const content = req.body.content;
-  
-    const newPost = new Post({
-      username,
-      content
-    });
-    // Täällä joku ongelma
-    newPost.save()
+  const username = req.body.username;
+  const content = req.body.content;
+
+  const newPost = new Post({
+    username,
+    content
+  });
+
+  newPost.save()
     .then(() => res.json('Post added!'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
-  
-router.route('/:id').get((req, res) => {
+
+
+// These are for getting and deleting posts by id
+// not currently in use, but good for future development
+
+/* router.route('/:id').get((req, res) => {
     Post.findById(req.params.id)
       .then(post => res.json(post))
       .catch(err => res.status(400).json('Error: ' + err));
@@ -32,18 +42,7 @@ router.route('/:id').delete((req, res) => {
       .then(() => res.json('Post deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
 }); 
+ */
 
-router.route("/find").post((req, res) => {
-  Post.find({ user: req.body.username }, (err, doc) => {
-      if (err) throw err;
-      if (!doc) res.json("No posts found from that user !");
-      if (doc) {
-          res.json("doc.user");
-      }
-
-
-  
-  });
-});
-
-  module.exports = router;
+// exporting the router
+module.exports = router;
