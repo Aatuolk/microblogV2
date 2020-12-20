@@ -15,10 +15,9 @@ router.route('/').get((req, res) => {
 // adds new users to the database and hashes their passwords
 router.route('/add').post((req, res) => {
   const username = req.body.username;
-  const password = req.body.password;
-  const hashedpassword = hashPassword(password);
+  const password = hashPassword(req.body.password);
 
-  const newUser = new User({ username, hashedpassword });
+  const newUser = new User({ username, password });
 
   newUser.save()
     .then(() => res.json('User added!'))
