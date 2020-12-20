@@ -62,10 +62,10 @@ export default class CreateUser extends Component {
 
             // Sends http post request to the backend (Adds new user to the DB)
             axios.post('http://localhost:5000/users/add', user)
-                .then(res => console.log(res.data));
+                .then((res) => console.log(res.data));
 
 
-            window.location = '/'; // Changes window to the "Frontpage" (Post-forum component)
+            // window.location = '/'; // Changes window to the "Frontpage" (Post-forum component)
         } else {
             alert('Passwords do not match try again!')
         }
@@ -80,7 +80,7 @@ export default class CreateUser extends Component {
                 <div className="jumbotron">
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <label>Username: </label>
+                            <label>Username (3-20 characters)</label>
                             <input type="text"
                                 required
                                 minLength= '3'
@@ -92,7 +92,7 @@ export default class CreateUser extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label>Password </label>
+                            <label>Password (6-14 characters)</label>
                             <input type="text"
                                 required
                                 minLength= '6'

@@ -90,7 +90,7 @@ export default class PostPage extends Component {
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>
-                                <strong>Username:</strong>
+                                <strong>Username: </strong>
                             </label>
                             <input type="text"
                                 required

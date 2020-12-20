@@ -16,7 +16,7 @@ app.use(express.json());  /* For parsing json  */
 // For connecting to MongoDB database via mongoose
 // database uri is stored in .env
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true,  useUnifiedTopology: true }
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
 );
 const connection = mongoose.connection;
 connection.once('open', () => {
