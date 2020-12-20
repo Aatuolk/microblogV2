@@ -14,8 +14,7 @@ const userSchema = new Schema({
   password: {
       type: String,
       required: true,
-      minlength: 6,
-      maxlength: 14
+      minlength: 6
   }
 }, {
   timestamps: true,

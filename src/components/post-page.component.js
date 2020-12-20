@@ -56,6 +56,7 @@ export default class PostPage extends Component {
 
     // Maps certain elements from the array if the given username matches with the username from the list
     postiLista() {
+        // eslint-disable-next-line
         return this.state.postList.map(currentPost => {
             if (currentPost.username === this.state.username) {
                 return <Posti post={currentPost} key={currentPost._id} />;
